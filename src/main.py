@@ -28,6 +28,10 @@ async def get_user(
 
 @app.post("/users")
 async def create_user(user: User) -> User:
+    """
+    This endpoint is only used for creating fake users to test
+    backend authentication
+    """
     hashed_password = get_hashed_password(user.password)
     user_create = UserCreate(username=user.username, password=hashed_password)
     await user_create.create()
