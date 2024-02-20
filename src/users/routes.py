@@ -17,7 +17,7 @@ from src.exceptions import Conflict
 router = APIRouter()
 
 
-@router.post("/login/access-token")
+@router.post("/login/access-token", include_in_schema=False)
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> Token:
@@ -28,7 +28,7 @@ async def login_for_access_token(
 
     access_token_expires = get_settings().ACCESS_EXPIRE_TOKEN
 
-    access_token = await create_access_token(user.username, access_token_expires)
+    access_token = await create_access_token(user.email, access_token_expires)
 
     return Token(access_token=access_token, token_type="bearer")
 
@@ -36,6 +36,7 @@ async def login_for_access_token(
 @router.post(
     "/signup",
     response_model=UserOut,
+    dependencies=[Depends(get_current_active_user)],
 )
 async def signup(user: UserCreate) -> UserOut:
     new_user = await get_user_by_email(user.email)
@@ -46,3 +47,8 @@ async def signup(user: UserCreate) -> UserOut:
     new_user = await create_user(user=user)
 
     return new_user
+
+
+@router.get("/me", include_in_schema=False)
+async def dashboard(user: UserOut = Depends(get_current_active_user)):
+    return user

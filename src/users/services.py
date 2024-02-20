@@ -1,13 +1,14 @@
 from typing import Optional
 
 from fastapi.encoders import jsonable_encoder
+from pydantic import EmailStr
 from src.auth.services import get_hashed_password, verify_password
 
 from src.users.models import User
 from src.users.schemas import UserCreate
 
 
-async def get_user_by_email(email: str) -> Optional[User]:
+async def get_user_by_email(email: EmailStr) -> Optional[User]:
     return await User.find_one(User.email == email)
 
 

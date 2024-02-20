@@ -4,25 +4,29 @@ from datetime import datetime, timedelta, timezone
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
+from pydantic import EmailStr
 
 from src.auth.schemas import TokenData
 from src.auth.exceptions import InactiveUser, NotAuthenticated
 from src.auth.services import verify_password
 from src.config import get_settings
 from src.users.models import User
+from src.users.schemas import UserOut
 from src.users.services import get_user_by_email
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login/access-token")
 
 
-async def authenticate_user(username: str, password: str) -> User | bool:
+async def authenticate_user(username: EmailStr, password: str) -> User | bool:
     user = await get_user_by_email(username)
-
+    print(user)
     if not user:
         return False
 
-    if not verify_password(plain_password=password, hashed_password=user.password):
+    if not verify_password(
+        plain_password=password, hashed_password=user.hashed_password
+    ):
         return False
 
     return user
@@ -42,22 +46,25 @@ async def create_access_token(data: str, expire_time: int | None = None) -> str:
     return encoded_jwt
 
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]) -> User:
+TokenDep = Annotated[str, Depends(oauth2_scheme)]
+
+
+async def get_current_user(token: TokenDep) -> User:
     try:
         payload = jwt.decode(
             token, get_settings().SECRET_KEY, algorithms=[get_settings().ALGORITHM]
         )
 
-        username: str = payload.get("sub")
+        email: str = payload.get("sub")
 
-        if not username:
+        if not email:
             raise NotAuthenticated()
 
-        token_data = TokenData(username=username)
+        token_data = TokenData(username=email)
     except JWTError as e:
         raise e
 
-    user = await get_user_by_email(username=token_data.username)
+    user = await get_user_by_email(email=token_data.username)
 
     if not user:
         raise NotAuthenticated()
@@ -65,9 +72,10 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]) -> Use
     return user
 
 
-async def get_current_active_user(
-    current_user: Annotated[User, Depends(get_current_user)]
-) -> User:
+CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+async def get_current_active_user(current_user: CurrentUser) -> UserOut:
     if not current_user.is_active:
         raise InactiveUser()
 
