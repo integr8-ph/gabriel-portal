@@ -21,11 +21,8 @@ load_dotenv(dotenv_path=ENV_PATH)
 
 
 async def get_user_in_db(username: str) -> User:
-    user = await UserCreate.find(UserCreate.username == username).to_list()
-    if user:
-        return user[0]
-
-    return None
+    user = await UserCreate.find(UserCreate.username == username).first_or_none()
+    return user
 
 
 def verify_password(plain_password: str, hashed_password) -> bool:
