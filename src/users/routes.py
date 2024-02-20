@@ -1,19 +1,20 @@
-import os
 from typing import Annotated
-from datetime import timedelta
-
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from dotenv import load_dotenv
 
-from src.auth.dependencies import create_access_token, authenticate_user
+from src.auth.dependencies import (
+    authenticate_user,
+    create_access_token,
+    get_current_active_user,
+)
 from src.auth.exceptions import InvalidUserOrPass
-from src.auth.constants import ENV_PATH
 from src.auth.schemas import Token
 from src.config import get_settings
+from src.users.schemas import UserCreate, UserOut
+from src.users.services import create_user, get_user_by_email
+from src.exceptions import Conflict
 
 router = APIRouter()
-load_dotenv(dotenv_path=ENV_PATH)
 
 
 @router.post("/login/access-token")
@@ -30,3 +31,18 @@ async def login_for_access_token(
     access_token = await create_access_token(user.username, access_token_expires)
 
     return Token(access_token=access_token, token_type="bearer")
+
+
+@router.post(
+    "/signup",
+    response_model=UserOut,
+)
+async def signup(user: UserCreate) -> UserOut:
+    new_user = await get_user_by_email(user.email)
+
+    if new_user:
+        raise Conflict()
+
+    new_user = await create_user(user=user)
+
+    return new_user

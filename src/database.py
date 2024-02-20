@@ -1,18 +1,19 @@
 from contextlib import asynccontextmanager
-
-from fastapi import FastAPI
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 
-from src.auth.models import UserCreate
+from src.config import get_settings
+from src.models import gather_models
 
 
 @asynccontextmanager
-async def db_init(app: FastAPI):
+async def db_init():
     try:
-        client = AsyncIOMotorClient("mongodb://127.0.0.1:27017")
-        await init_beanie(database=client["testdb"], document_models=[UserCreate])
-        print("Successfully connected to the database.")
+        client = AsyncIOMotorClient(get_settings().DATABASE_URL)
+        await init_beanie(
+            database=client[get_settings().COLLECTION_NAME],
+            document_models=gather_models(),
+        )
         yield
     except Exception as e:
         raise RuntimeError("Failed to connect to the database.") from e

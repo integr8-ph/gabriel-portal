@@ -8,7 +8,3 @@ class InactiveUser(BadRequest):
 
 class InvalidUserOrPass(NotAuthenticated):
     DETAIL = InvalidUserOrPassDetail.DETAIL
-
-
-if __name__ == "__main__":
-    print(InactiveDetail.DETAIL)
