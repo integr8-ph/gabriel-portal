@@ -6,6 +6,7 @@ from pydantic import EmailStr
 
 from src.auth.dependencies import (
     authenticate_user,
+    authenticate_user_by_email,
     create_access_token,
     get_current_active_superuser,
     get_current_active_user,
@@ -14,17 +15,16 @@ from src.auth.dependencies import (
 from src.auth.exceptions import InvalidUserOrPass
 from src.auth.schemas import Token
 from src.config import get_settings
-from src.users.exceptions import UserNotFound
+from src.users.dependencies import SuperUserDep
 from src.users.schemas import (
-    CompleteUserDeleteOut,
-    CompleteUserOut,
-    CompleteUserUpdateOut,
+    DeleteOut,
+    CreateOut,
+    UpdateOut,
     UserCreate,
-    UserOut,
     UserUpdate,
 )
 from src.users.services import (
-    create_user,
+    create_user_in_db,
     delete_user_in_db,
     get_all_users_in_db,
     get_user_by_email,
@@ -51,32 +51,26 @@ async def login_for_access_token(
     return Token(access_token=access_token, token_type="bearer")
 
 
-@router.post("/signup", dependencies=[Depends(get_current_active_superuser)])
-async def signup(user: UserCreate) -> UserOut:
+@router.post("/user", dependencies=[SuperUserDep])
+async def create_user(user: UserCreate) -> CreateOut:
     new_user = await get_user_by_email(user.email)
 
     if new_user:
         raise Conflict()
 
-    new_user = await create_user(user=user)
+    new_user = await create_user_in_db(user=user)
 
     return new_user
 
 
-SuperUserDep = Depends(get_current_active_superuser)
-
-
 @router.get("/users", dependencies=[SuperUserDep])
-async def get_all_users() -> list[CompleteUserOut]:
+async def get_all_users() -> list[CreateOut]:
     return await get_all_users_in_db()
 
 
 @router.get("/user/{email}", dependencies=[SuperUserDep])
-async def get_user(email: EmailStr) -> CompleteUserOut:
-    user = await get_user_by_email(email)
-
-    if not user:
-        raise UserNotFound()
+async def get_user(email: EmailStr) -> CreateOut:
+    user = await authenticate_user_by_email(email)
 
     return user
 
@@ -84,34 +78,26 @@ async def get_user(email: EmailStr) -> CompleteUserOut:
 @router.put("/user/{email}", dependencies=[SuperUserDep])
 async def update_user(
     email: EmailStr, to_update: Annotated[UserUpdate, Depends()]
-) -> CompleteUserUpdateOut:
-    user = await get_user_by_email(email)
-
-    if not user:
-        raise UserNotFound()
-
+) -> UpdateOut:
+    user = await authenticate_user_by_email(email)
     updated_user = await update_user_in_db(user, to_update)
 
     return updated_user
 
 
 @router.delete("/user/{email}", dependencies=[SuperUserDep])
-async def delete_user(email: EmailStr) -> CompleteUserDeleteOut:
-    user = await get_user_by_email(email)
-
-    if not user:
-        raise UserNotFound()
-
+async def delete_user(email: EmailStr) -> DeleteOut:
+    user = await authenticate_user_by_email(email)
     deleted_user = await delete_user_in_db(user)
 
     return deleted_user
 
 
 @router.get("/me", include_in_schema=False)
-async def dashboard(user: UserOut = Depends(get_current_active_user)):
+async def dashboard(user: CreateOut = Depends(get_current_active_user)):
     return user
 
 
 @router.get("/admin", include_in_schema=False)
-async def admin(user: Annotated[UserOut, Depends(get_current_active_superuser)]):
+async def admin(user: Annotated[CreateOut, Depends(get_current_active_superuser)]):
     return user
