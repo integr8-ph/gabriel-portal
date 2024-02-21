@@ -7,20 +7,20 @@ from jose import jwt, JWTError
 from pydantic import EmailStr
 
 from src.auth.schemas import TokenData
-from src.auth.exceptions import InactiveUser, NotAuthenticated
+from src.auth.exceptions import InactiveUser, NotAuthenticated, NotSuperuser
 from src.auth.services import verify_password
 from src.config import get_settings
+from src.users.exceptions import UserNotFound
 from src.users.models import User
-from src.users.schemas import UserOut
+from src.users.schemas import CreateOut
 from src.users.services import get_user_by_email
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login/access-token")
 
 
-async def authenticate_user(username: EmailStr, password: str) -> User | bool:
-    user = await get_user_by_email(username)
-    print(user)
+async def authenticate_user(email: EmailStr, password: str) -> User | bool:
+    user = await get_user_by_email(email)
     if not user:
         return False
 
@@ -28,6 +28,15 @@ async def authenticate_user(username: EmailStr, password: str) -> User | bool:
         plain_password=password, hashed_password=user.hashed_password
     ):
         return False
+
+    return user
+
+
+async def authenticate_user_by_email(email: EmailStr) -> User:
+    user = await get_user_by_email(email)
+
+    if not user:
+        raise UserNotFound()
 
     return user
 
@@ -60,11 +69,11 @@ async def get_current_user(token: TokenDep) -> User:
         if not email:
             raise NotAuthenticated()
 
-        token_data = TokenData(username=email)
+        token_data = TokenData(email=email)
     except JWTError as e:
         raise e
 
-    user = await get_user_by_email(email=token_data.username)
+    user = await get_user_by_email(email=token_data.email)
 
     if not user:
         raise NotAuthenticated()
@@ -75,8 +84,15 @@ async def get_current_user(token: TokenDep) -> User:
 CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
-async def get_current_active_user(current_user: CurrentUser) -> UserOut:
+async def get_current_active_user(current_user: CurrentUser) -> CreateOut:
     if not current_user.is_active:
         raise InactiveUser()
+
+    return current_user
+
+
+async def get_current_active_superuser(current_user: CurrentUser) -> CreateOut:
+    if not current_user.is_superuser:
+        raise NotSuperuser()
 
     return current_user
