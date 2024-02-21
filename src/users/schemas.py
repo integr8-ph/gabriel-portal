@@ -16,25 +16,20 @@ class UserUpdate(BaseModel):
     is_superuser: bool | None = None
 
 
-class UserOut(BaseModel):
-    email: EmailStr
-    created_at: datetime
-
-
-class BaseCompleteUser(BaseModel):
+class BaseOut(BaseModel):
     email: EmailStr
     hashed_password: str
-    is_active: bool = True
-    is_superuser: bool = True
+    is_active: bool
+    is_superuser: bool
 
 
-class CompleteUserOut(BaseCompleteUser):
+class CreateOut(BaseOut):
     created_at: datetime
 
 
-class CompleteUserUpdateOut(BaseCompleteUser):
+class UpdateOut(BaseOut):
     updated_at: Annotated[datetime, Field(default_factory=datetime.utcnow)]
 
 
-class CompleteUserDeleteOut(BaseCompleteUser):
+class DeleteOut(BaseOut):
     deleted_at: Annotated[datetime, Field(default_factory=datetime.utcnow)]
