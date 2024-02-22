@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     ALGORITHM: str
     ACCESS_EXPIRE_TOKEN: int
 
-    class Config:
+    class ConfigDict:
         env_file = ".env"
 
 
