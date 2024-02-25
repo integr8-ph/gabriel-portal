@@ -14,8 +14,9 @@ from src.auth.services import verify_password
 @pytest.mark.asyncio
 async def test_login_for_access_token(client: AsyncClient) -> None:
     user = create_random_user()
-    await client.post("/user", json=jsonable_encoder(user))
 
+    # CHECK CREDENTIALS
+    await client.post("/user", json=jsonable_encoder(user))
     form_data = {"username": user.email, "password": user.password}
 
     response = await client.post("/login/access-token", data=form_data)
@@ -23,11 +24,12 @@ async def test_login_for_access_token(client: AsyncClient) -> None:
     assert "access_token" in response.json()
     assert "token_type" in response.json()
 
+    # INVALID CREDENTIALS
     form_data["username"] = "random@example.com"
-
     response = await client.post("login/access-token", data=form_data)
     assert response.status_code == 401
 
+    # INVALID DATA
     response = await client.post("login/access-token", data={})
     assert response.status_code == 422
 
@@ -38,8 +40,8 @@ async def test_create_user(client: AsyncClient) -> None:
 
     # CREATE USER
     response = await client.post("/user", json=jsonable_encoder(new_user))
-    assert response.status_code == 200
 
+    assert response.status_code == 200
     response_data = response.json()
 
     assert response_data["email"] == new_user.email
@@ -60,16 +62,16 @@ async def test_create_user(client: AsyncClient) -> None:
 @pytest.mark.asyncio
 async def test_get_all_users(client: AsyncClient) -> None:
     # CREATE NUMBER OF USERS
-    await create_several_users(5)
+    await create_several_users(3)
 
     # GET ALL USERS
     response = await client.get("/users")
-    assert response.status_code == 200
 
+    assert response.status_code == 200
     response_data = response.json()
 
     assert isinstance(response_data, list)
-    assert len(response_data) == 5
+    assert len(response_data) == 3
 
 
 @pytest.mark.asyncio
@@ -78,8 +80,8 @@ async def test_get_user(client: AsyncClient) -> None:
 
     # CHECK USER
     response = await client.get(f"/user/{user.email}")
-    assert response.status_code == 200
 
+    assert response.status_code == 200
     response_data = response.json()
 
     assert response_data["email"] == user.email
