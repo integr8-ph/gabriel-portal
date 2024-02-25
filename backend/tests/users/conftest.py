@@ -1,11 +1,14 @@
 import os
 from typing import AsyncIterator
+from beanie import init_beanie
 import pytest_asyncio
 
 from httpx import AsyncClient
 from asgi_lifespan import LifespanManager
 from motor.motor_asyncio import AsyncIOMotorClient
 
+from src.models import gather_models
+from src.config import get_settings
 from src.auth.dependencies import get_current_active_superuser
 
 from pathlib import Path
@@ -27,7 +30,9 @@ from src.main import app  # noqa
 @pytest_asyncio.fixture(autouse=True)
 async def clear_test_database():
     client = AsyncIOMotorClient(TEST_DATABASE_URL)
-    test_db = client["portal"]
+    test_db = client[get_settings().COLLECTION_NAME]
+
+    await init_beanie(test_db, document_models=gather_models())
 
     yield None
 
