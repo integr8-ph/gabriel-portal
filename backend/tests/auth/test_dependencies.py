@@ -65,15 +65,13 @@ async def test_create_access_token() -> None:
     assert decoded_payload["sub"] == fake_email
     assert "exp" in decoded_payload
 
+    # CHECK TOKEN WITH CURRENT TIME
     expiration_time = int(decoded_payload["exp"])
     current_time = int(time.time())
-
     assert current_time < expiration_time
 
     # CHECK TOKEN 31 DAYS LATER
-
     current_time = int(time.time()) + (31 * 86_400)
-
     assert current_time > expiration_time
 
 
