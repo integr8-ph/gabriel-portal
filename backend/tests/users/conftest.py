@@ -1,4 +1,3 @@
-import os
 from typing import AsyncIterator
 from beanie import init_beanie
 import pytest_asyncio
@@ -8,21 +7,18 @@ from asgi_lifespan import LifespanManager
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from src.models import gather_models
-from src.config import get_settings
 from src.auth.dependencies import get_current_active_superuser
+from src.config import settings
 
-from dotenv import load_dotenv, find_dotenv
+settings.DATABASE_URL = settings.TEST_DATABASE_URL
 
-load_dotenv(find_dotenv())
-
-os.environ["DATABASE_URL"] = os.getenv("TEST_DATABASE_URL")
-
+from src.config import get_settings  # noqa
 from src.main import app  # noqa
 
 
 @pytest_asyncio.fixture(autouse=True)
 async def clear_test_database():
-    client = AsyncIOMotorClient(os.getenv("TEST_DATABASE_URL"))
+    client = AsyncIOMotorClient(get_settings().TEST_DATABASE_URL)
     test_db = client[get_settings().COLLECTION_NAME]
 
     await init_beanie(test_db, document_models=gather_models())
