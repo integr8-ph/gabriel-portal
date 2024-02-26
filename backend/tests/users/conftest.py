@@ -8,9 +8,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from src.models import gather_models
 from src.auth.dependencies import get_current_active_superuser
-from src.config import settings
-
-settings.DATABASE_URL = settings.TEST_DATABASE_URL
 
 from src.config import get_settings  # noqa
 from src.main import app  # noqa
