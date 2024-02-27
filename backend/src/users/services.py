@@ -30,14 +30,14 @@ async def create_user_in_db(user: UserCreate) -> CreateOut:
     return new_user
 
 
-async def update_user_in_db(user: User, details: UserUpdate) -> UpdateOut:
+async def update_user_in_db(email: EmailStr, details: UserUpdate) -> UpdateOut:
     if details.hashed_password is not None:
         details.hashed_password = get_hashed_password(details.hashed_password)
 
-    updated_user = await CRUDBase(User).update(user.email, details)
+    updated_user = await CRUDBase(User).update(email, details)
     return updated_user
 
 
-async def delete_user_in_db(user: User) -> DeleteOut:
-    deleted_user = await CRUDBase(User).delete(user.email)
+async def delete_user_in_db(email: EmailStr) -> DeleteOut:
+    deleted_user = await CRUDBase(User).delete(email)
     return deleted_user
