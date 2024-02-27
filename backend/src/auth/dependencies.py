@@ -10,7 +10,6 @@ from src.auth.schemas import TokenData
 from src.auth.exceptions import InactiveUser, NotAuthenticated, NotSuperuser
 from src.auth.services import verify_password
 from src.config import get_settings
-from src.users.exceptions import UserNotFound
 from src.users.models import User
 from src.users.schemas import CreateOut
 from src.users.services import get_user_by_email
@@ -22,7 +21,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login/access-token")
 async def authenticate_user(email: EmailStr, password: str) -> User | bool:
     try:
         user = await get_user_by_email(email)
-    except UserNotFound:
+    except Exception:
         return False
 
     if not verify_password(
@@ -67,7 +66,7 @@ async def get_current_user(token: TokenDep) -> User:
 
     try:
         user = await get_user_by_email(email=token_data.email)
-    except UserNotFound:
+    except Exception:
         return False
 
     if not user:
