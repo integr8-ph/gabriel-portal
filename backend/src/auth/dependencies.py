@@ -20,23 +20,15 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login/access-token")
 
 
 async def authenticate_user(email: EmailStr, password: str) -> User | bool:
-    user = await get_user_by_email(email)
-    if not user:
+    try:
+        user = await get_user_by_email(email)
+    except UserNotFound:
         return False
 
     if not verify_password(
         plain_password=password, hashed_password=user.hashed_password
     ):
         return False
-
-    return user
-
-
-async def authenticate_user_by_email(email: EmailStr) -> User:
-    user = await get_user_by_email(email)
-
-    if not user:
-        raise UserNotFound()
 
     return user
 
@@ -73,7 +65,10 @@ async def get_current_user(token: TokenDep) -> User:
     except JWTError as e:
         raise e
 
-    user = await get_user_by_email(email=token_data.email)
+    try:
+        user = await get_user_by_email(email=token_data.email)
+    except UserNotFound:
+        return False
 
     if not user:
         raise NotAuthenticated()
