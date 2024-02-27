@@ -2,14 +2,13 @@ import time
 import pytest
 from jose import jwt
 
-from src.auth.exceptions import InactiveUser, NotSuperuser
 from src.exceptions import NotAuthenticated
+from src.auth.exceptions import InactiveUser, NotSuperuser
 from src.config import get_settings
-from src.users.exceptions import UserNotFound
+
 from src.users.models import User
 from src.auth.dependencies import (
     authenticate_user,
-    authenticate_user_by_email,
     create_access_token,
     get_current_active_superuser,
     get_current_active_user,
@@ -24,32 +23,18 @@ async def test_authenticate_user(clear_test_database) -> None:
     user = await create_single_user()
 
     # AUTHENTICATE USER
-    output = await authenticate_user(user.email, user.password)
+    output = await authenticate_user(user.email, user.hashed_password)
     assert isinstance(output, User)
     assert output.email == user.email
-    assert verify_password(user.password, output.hashed_password)
+    assert verify_password(user.hashed_password, output.hashed_password)
 
     # AUTHENTICATE NON-EXISTING EMAIL
-    output = await authenticate_user("abcd@efg.com", user.password)
+    output = await authenticate_user("abcd@efg.com", user.hashed_password)
     assert output is False
 
     # AUTHENTICATE INVALID PASSWORD
     output = await authenticate_user(user.email, "qwerty")
     assert output is False
-
-
-@pytest.mark.asyncio
-async def test_authenticate_user_by_email(clear_test_database) -> None:
-    user = await create_single_user()
-
-    # AUTHENTICATE USER
-    output = await authenticate_user_by_email(user.email)
-    assert isinstance(output, User)
-    assert output.email == user.email
-
-    # AUTHENTICATE NON-EXISTING EMAIL
-    with pytest.raises(UserNotFound):
-        await authenticate_user_by_email("abcd@efg.com")
 
 
 @pytest.mark.asyncio

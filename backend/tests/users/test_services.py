@@ -1,5 +1,6 @@
 import pytest
 
+from src.users.exceptions import UserNotFound
 from src.auth.services import verify_password
 from src.users.schemas import UserCreate, UserUpdate
 from src.users.models import User
@@ -22,12 +23,12 @@ from tests.utils.utils import (
 async def test_get_user_by_email() -> None:
     user = await create_single_user()
 
-    output = await get_user_by_email(user.email)
+    output = await get_user_by_email(email=user.email)
     assert isinstance(output, User)
     assert output.email == user.email
 
-    output = await get_user_by_email("abcd@efg.com")
-    assert output is None
+    with pytest.raises(UserNotFound):
+        await get_user_by_email("abcd@efg.com")
 
 
 @pytest.mark.asyncio
@@ -47,13 +48,14 @@ async def test_update_user_in_db() -> None:
     user = await create_single_user()
     to_update = UserUpdate(password=random_lower_string(5), is_active=False)
 
-    to_update_user = await get_user_by_email(user.email)
-    assert isinstance(to_update_user, User)
-    assert to_update_user.email == user.email
-
-    updated_user = await update_user_in_db(to_update_user, to_update.model_copy())
+    updated_user = await update_user_in_db(
+        email=user.email, details=to_update.model_copy()
+    )
     assert isinstance(updated_user, dict)
-    assert verify_password(to_update.hashed_password, updated_user["hashed_password"])
+    assert verify_password(
+        plain_password=to_update.hashed_password,
+        hashed_password=updated_user["hashed_password"],
+    )
     assert updated_user["is_superuser"] is True
     assert updated_user["is_active"] is False
     assert "_id" in updated_user
@@ -64,13 +66,12 @@ async def test_update_user_in_db() -> None:
 async def test_delete_user_in_db() -> None:
     user = await create_single_user()
 
-    to_delete_user = await get_user_by_email(user.email)
-    assert isinstance(to_delete_user, User)
-    assert to_delete_user.email == user.email
-
-    deleted_user = await delete_user_in_db(to_delete_user)
+    deleted_user = await delete_user_in_db(email=user.email)
     assert isinstance(deleted_user, dict)
-    assert verify_password(user.password, deleted_user["hashed_password"])
+    assert verify_password(
+        plain_password=user.hashed_password,
+        hashed_password=deleted_user["hashed_password"],
+    )
     assert deleted_user["is_superuser"] is True
     assert deleted_user["is_active"] is True
     assert "_id" in deleted_user
@@ -85,7 +86,9 @@ async def test_create_user_in_db() -> None:
 
     created_user = await create_user_in_db(to_create_user.model_copy())
     assert isinstance(created_user, dict)
-    assert verify_password(to_create_user.password, created_user["hashed_password"])
+    assert verify_password(
+        to_create_user.hashed_password, created_user["hashed_password"]
+    )
     assert created_user["is_superuser"] is True
     assert created_user["is_active"] is True
     assert "_id" in created_user

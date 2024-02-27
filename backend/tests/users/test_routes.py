@@ -17,7 +17,7 @@ async def test_login_for_access_token(client: AsyncClient) -> None:
 
     # CHECK CREDENTIALS
     await client.post("/user", json=jsonable_encoder(user))
-    form_data = {"username": user.email, "password": user.password}
+    form_data = {"username": user.email, "password": user.hashed_password}
 
     response = await client.post("/login/access-token", data=form_data)
     assert response.status_code == 200
@@ -45,7 +45,7 @@ async def test_create_user(client: AsyncClient) -> None:
     response_data = response.json()
 
     assert response_data["email"] == new_user.email
-    assert verify_password(new_user.password, response_data["hashed_password"])
+    assert verify_password(new_user.hashed_password, response_data["hashed_password"])
     assert response_data["is_superuser"] is True
     assert response_data["is_active"] is True
     assert "created_at" in response_data
@@ -85,7 +85,7 @@ async def test_get_user(client: AsyncClient) -> None:
     response_data = response.json()
 
     assert response_data["email"] == user.email
-    assert verify_password(user.password, response_data["hashed_password"])
+    assert verify_password(user.hashed_password, response_data["hashed_password"])
     assert response_data["is_superuser"] is True
     assert response_data["is_active"] is True
     assert "created_at" in response_data
@@ -151,7 +151,7 @@ async def test_delete_user(client: AsyncClient) -> None:
     response_data = response.json()
 
     assert response_data["email"] == user.email
-    assert verify_password(user.password, response_data["hashed_password"])
+    assert verify_password(user.hashed_password, response_data["hashed_password"])
     assert response_data["is_superuser"] is True
     assert response_data["is_active"] is True
     assert "deleted_at" in response_data
