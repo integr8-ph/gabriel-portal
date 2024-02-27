@@ -8,7 +8,6 @@
     font-family: "Montserrat", sans-serif;
 }
 
-//defauly styling
 :root{
     --primaryColor: #044883;
     --hoverColor: #9ec3d6;
@@ -20,7 +19,6 @@
     --inputColor: hsl(330, 12%, 97%);
     --inputColor: hsl(231, 14%, 90%);
 
-    /* Font and Typography */
     --biggestFontSize: 2.5rem;
     --h1FontSize: 1.5rem;
     --h2FontSize: 1.25rem;
@@ -63,7 +61,6 @@ img{
     width: 50%;
 }
 
-
 .message{
     display: none;
 }
@@ -96,58 +93,6 @@ img{
 }
 
 
-
-//Page Styling
-
-// .loginPage {
-//     height: 100vh;
-//     width: 100%;
-//     margin: auto;
-//     border-radius: 10px;
-//     overflow: hidden;
-//     justify-content: space-between;
-//     box-shadow: 0 7px 50px rgb(214, 223, 213);
-
-//     .container{
-//         height: 75vh;
-//         width: 60%;
-//         margin: auto;
-//         margin-top: 5%;
-//         justify-content: space-between;
-//         border-radius: 10px;
-//         background: hsl(0, 0%, 91%);
-
-//         .coverDiv{
-//             position: relative;
-//             display: flex;
-//             flex-basis: 50%;
-//             width: 70%;
-//             height: 100%;
-//             padding: 0 1.5rem;
-//             text-align: center;
-//             justify-content: center;
-//             flex-direction: column;
-//             margin: auto;
-//             border-radius: 10px;
-//             overflow: hidden;
-
-//             .cover .footerDiv{
-//                 position: absolute;
-//             }
-
-//             .cover{
-//                 height: 100%;
-//                 width: 100%;
-//                 object-fit: cover;
-//                 top: 0;
-//                 bottom: 0;
-//                 right: 0;
-//                 left: 0;
-//             }
-//         }
-//     }
-// }
-
 .loginPage {
     height: 100vh;
     width: 100%;
@@ -165,12 +110,12 @@ img{
         justify-content: space-between;
         border-radius: 10px;
         background: hsl(0, 0%, 91%);
-        display: flex; /* Add this line to make the container a flex container */
+        display: flex; 
 
         .coverDiv {
             position: relative;
             flex-basis: 50%;
-            width: 100%; /* Adjusted width to cover the entire container */
+            width: 100%; 
             height: 100%;
             padding: 0 1.5rem;
             text-align: center;
@@ -181,9 +126,10 @@ img{
 
             .footerDiv {
                 position: absolute;
-                bottom: 1rem; /* Adjusted the position to place it at the bottom */
-                width: 100%; /* Adjusted width to cover the entire container */
+                bottom: 1rem; 
+                width: 100%; 
                 text-align: center;
+                color: var(--whiteColor);
             }
 
             .cover {
@@ -197,7 +143,37 @@ img{
                 left: 0;
             }
 
-            
+            .footerDiv{
+                position: absolute;
+                bottom: 10px;
+                padding: 0 1rem;
+                height: 50px;
+                background: rgba(255, 255, 255, 0.248);
+                left: 0;
+                right: 0;
+                justify-content: space-between;
+                display: flex;
+                align-items: center;
+                backdrop-filter: blur(1px);
+                border-radius: 10px;
+
+                .btn{
+                    background: var(--whiteColor);
+                    color: var(--primaryColor);
+                    padding: .8rem 1.5rem;
+                    border-radius: 10px;
+                    font-weight: 400;
+                    transition: .3s ease;
+                    height: 40px;
+
+                    &:hover{
+                        background: var(--hoverColor);
+                        color: var(--blackColor);
+                    }
+                }
+
+            }
+
         }
     }
 }

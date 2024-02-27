@@ -3,40 +3,30 @@ import './Login.css'
 import '../../App.css'
 import { Link } from 'react-router-dom'
 
-//Import Assets
-import cover from '../../assets/LoginAssets/cover.png'
+
+import cover from '../../assets/LoginAssets/cover1.png'
 import logo from '../../assets/LoginAssets/logo.jpg'
 
-//Import Icons
+
 import { FaUserShield } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
-// import { MdHeight } from 'react-icons/md';
 
 function Login() {
     return (
-        // <div>
-        //     <a href="/dashboard">to dashboard</a> <br />
-        //     <a href="/login">to login</a> <br />
-        //     This is login page
-        // </div>
 
         <div className='loginPage flex'>
             <div className='container flex'>
 
                 <div className="coverDiv">
                     <img src={cover} className="cover" alt="Background Cover"></img>
-
-                    <div className="textDiv">
-                        <h2 className='title'></h2>
-                        <p>Adopt the fast pace innovation!</p>
-                    </div>
-
-                    <div className="footerDiv flex">
-                        <span className='text'>Need Assistance? </span>
-                        <Link to={'/contact'}>
-                            <button className='btn'>Contact Us</button>
-                        </Link>
-                    </div>
+                    <center>
+                        <div className="footerDiv flex">
+                            <span className='text'>Need Assistance? </span>
+                            <Link to={'/contact'}>
+                                <button className='btn'>Contact Us</button>
+                            </Link>
+                        </div>
+                    </center>
                 </div>
                 
                 <div className="formDiv flex">
