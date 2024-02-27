@@ -37,16 +37,23 @@ class CRUDBase(Generic[ModelType]):
     async def get(self, email: EmailStr) -> Optional[ModelType]:
         return await self.model.find_one({"email": email})
 
+    async def get_all(self) -> Optional[list[ModelType]]:
+        return await self.model.find_all().to_list()
+
     async def create(self, schema: BaseModel) -> Optional[ModelType]:
-        created_user = await self.model(**schema.model_dump()).insert()
-        return created_user
+        created_user = await self.model(
+            **schema.model_dump(exclude=["password"]), hashed_password=schema.password
+        ).insert()
+        return jsonable_encoder(created_user)
 
     async def update(self, email: EmailStr, schema: BaseModel) -> Optional[ModelType]:
-        updated_user = await self.model.find_one({"email": email}).set(
-            schema.model_dump(exclude_none=True)
+        await self.model.find_one({"email": email}).set(
+            {**schema.model_dump(exclude_none=True)}
         )
-        return updated_user
+        updated_user = await self.get(email=email)
+        return jsonable_encoder(updated_user)
 
     async def delete(self, email: EmailStr) -> Optional[ModelType]:
-        deleted_user = await self.model.find_one({"email": email}).delete()
-        return deleted_user
+        deleted_user = await self.get(email=email)
+        await deleted_user.delete()
+        return jsonable_encoder(deleted_user)
