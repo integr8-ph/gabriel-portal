@@ -51,7 +51,7 @@ async def login_for_access_token(
 
 @router.post("/user", dependencies=[SuperUserDep])
 async def create_user(user: UserCreate) -> CreateOut:
-    new_user = await create_user_in_db(user=user)
+    new_user = await create_user_in_db(create_user=user)
     return new_user
 
 

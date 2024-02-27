@@ -67,7 +67,7 @@ async def get_current_user(token: TokenDep) -> User:
     try:
         user = await get_user_by_email(email=token_data.email)
     except Exception:
-        return False
+        raise NotAuthenticated()
 
     if not user:
         raise NotAuthenticated()

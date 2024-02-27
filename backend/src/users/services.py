@@ -26,7 +26,9 @@ async def get_all_users_in_db() -> Optional[CreateOut]:
 async def create_user_in_db(create_user: UserCreate) -> CreateOut:
     create_user.hashed_password = get_hashed_password(create_user.hashed_password)
 
-    new_user = await user.create(key="email", value=user.email, schema=create_user)
+    new_user = await user.create(
+        key="email", value=create_user.email, schema=create_user
+    )
     return new_user
 
 
