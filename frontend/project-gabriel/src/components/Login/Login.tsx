@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 
 import cover from '../../assets/LoginAssets/cover1.png'
-import logo from '../../assets/LoginAssets/logo.jpg'
+import logo from '../../assets/LoginAssets/logo.png'
 
 
 import { FaUserShield } from "react-icons/fa";
@@ -31,12 +31,12 @@ function Login() {
                 
                 <div className="formDiv flex">
                     <div className="headerDiv">
-                        {/* <img src={logo} alt="Logo Image"/> */}
-                        <h3>Welcome Back!</h3>
+                        <img src={logo} alt="Logo Image"/>
                     </div>
 
                     <form action="" className='form grid'>
                         <span>Login status will go here</span>
+
                         <div className="inputDiv">
                             <label htmlFor='username'>Username</label>
                             <div className="input flex">
@@ -53,9 +53,9 @@ function Login() {
                             </div>
                         </div>
 
-                        <button type='submit' className='btn flex'>
+                        <button type='submit' className='loginbtn flex'>
                             <span>LOGIN</span>
-                        </button><br />
+                        </button>
 
                         <span className='forgotPassword'>
                             Forgot your password? <a href="">Click Here</a>
