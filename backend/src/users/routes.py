@@ -23,10 +23,10 @@ from src.users.schemas import (
     UserUpdate,
 )
 from src.users.services import (
+    check_user_exists,
     create_user_in_db,
     delete_user_in_db,
     get_all_users_in_db,
-    get_user_by_email,
     update_user_in_db,
 )
 
@@ -62,7 +62,7 @@ async def get_all_users() -> list[CreateOut]:
 
 @router.get("/user/{email}", dependencies=[SuperUserDep])
 async def get_user(email: EmailStr) -> CreateOut:
-    user = await get_user_by_email(email)
+    user = await check_user_exists(email)
     return user
 
 
