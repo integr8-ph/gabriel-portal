@@ -3,13 +3,13 @@ import "./App.scss"
 import Dashboard from "./components/Dashboard/Dashboard"
 import Login from "./components/Login/Login"
 
-//Import React react dom
+
 import {
   createBrowserRouter,
   RouterProvider
 } from 'react-router-dom'
 
-//for the router
+
 const router = createBrowserRouter([
   {
     path: '/',
