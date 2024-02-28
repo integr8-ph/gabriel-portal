@@ -6,7 +6,6 @@ from pydantic import EmailStr
 
 from src.auth.dependencies import (
     authenticate_user,
-    authenticate_user_by_email,
     create_access_token,
     get_current_active_superuser,
     get_current_active_user,
@@ -24,13 +23,12 @@ from src.users.schemas import (
     UserUpdate,
 )
 from src.users.services import (
+    check_user_exists,
     create_user_in_db,
     delete_user_in_db,
     get_all_users_in_db,
-    get_user_by_email,
     update_user_in_db,
 )
-from src.exceptions import Conflict
 
 router = APIRouter()
 
@@ -53,13 +51,7 @@ async def login_for_access_token(
 
 @router.post("/user", dependencies=[SuperUserDep])
 async def create_user(user: UserCreate) -> CreateOut:
-    new_user = await get_user_by_email(user.email)
-
-    if new_user:
-        raise Conflict()
-
-    new_user = await create_user_in_db(user=user)
-
+    new_user = await create_user_in_db(create_user=user)
     return new_user
 
 
@@ -70,8 +62,7 @@ async def get_all_users() -> list[CreateOut]:
 
 @router.get("/user/{email}", dependencies=[SuperUserDep])
 async def get_user(email: EmailStr) -> CreateOut:
-    user = await authenticate_user_by_email(email)
-
+    user = await check_user_exists(email)
     return user
 
 
@@ -79,17 +70,13 @@ async def get_user(email: EmailStr) -> CreateOut:
 async def update_user(
     email: EmailStr, to_update: Annotated[UserUpdate, Depends()]
 ) -> UpdateOut:
-    user = await authenticate_user_by_email(email)
-    updated_user = await update_user_in_db(user, to_update)
-
+    updated_user = await update_user_in_db(email, to_update)
     return updated_user
 
 
 @router.delete("/user/{email}", dependencies=[SuperUserDep])
 async def delete_user(email: EmailStr) -> DeleteOut:
-    user = await authenticate_user_by_email(email)
-    deleted_user = await delete_user_in_db(user)
-
+    deleted_user = await delete_user_in_db(email)
     return deleted_user
 
 
