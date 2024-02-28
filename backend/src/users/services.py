@@ -50,6 +50,6 @@ async def create_user_in_db(user: UserCreate) -> CreateOut:
         email=user.email, hashed_password=user.password, is_superuser=user.is_superuser
     ).insert()
 
-    json_encode_user = jsonable_encoder(new_user)
+    json_encode_created_user = jsonable_encoder(new_user)
 
-    return json_encode_user
+    return json_encode_created_user
