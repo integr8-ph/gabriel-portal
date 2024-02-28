@@ -5,6 +5,7 @@ from src.auth.services import verify_password
 from src.users.schemas import UserCreate, UserUpdate
 from src.users.models import User
 from src.users.services import (
+    check_user_exists,
     create_user_in_db,
     delete_user_in_db,
     get_all_users_in_db,
@@ -20,7 +21,7 @@ from tests.utils.utils import (
 
 
 @pytest.mark.asyncio
-async def test_get_user_by_email() -> None:
+async def test_check_user_exists() -> None:
     user = await create_single_user()
 
     output = await get_user_by_email(email=user.email)
@@ -28,7 +29,19 @@ async def test_get_user_by_email() -> None:
     assert output.email == user.email
 
     with pytest.raises(UserNotFound):
-        await get_user_by_email("abcd@efg.com")
+        await check_user_exists("abcd@efg.com")
+
+
+@pytest.mark.asyncio
+async def test_get_user_by_email() -> None:
+    user = await create_single_user()
+
+    output = await get_user_by_email(email=user.email)
+    assert isinstance(output, User)
+    assert output.email == user.email
+
+    output = await get_user_by_email("abcd@efg.com")
+    assert output is None
 
 
 @pytest.mark.asyncio
