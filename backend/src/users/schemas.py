@@ -6,7 +6,7 @@ from datetime import datetime
 
 class UserCreate(BaseModel):
     email: EmailStr
-    password: str
+    hashed_password: Annotated[str, Field(alias="password")]
     is_superuser: bool = True
 
 
