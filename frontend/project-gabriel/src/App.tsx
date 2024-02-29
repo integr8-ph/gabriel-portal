@@ -1,36 +1,26 @@
-import React from 'react';
-import "./App.scss"
-import Dashboard from "./components/Dashboard/Dashboard"
-import Login from "./components/Login/Login"
+import React from "react";
 
+import { useRoutes } from "react-router-dom";
 
-import {
-  createBrowserRouter,
-  RouterProvider
-} from 'react-router-dom'
+import "./App.scss";
+import Dashboard from "./components/Dashboard/Dashboard";
+import Login from "./components/Login/Login";
+import PrivateRoute from "./components/Auth/auth";
 
+const App = () => {
+    const routes = useRoutes([
+        {
+            path: "/",
+            element: <PrivateRoute />,
+            children: [{ path: "/", element: <Dashboard /> }],
+        },
+        {
+            path: "/login",
+            element: <Login />,
+        },
+    ]);
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <div><Login /></div>
-  },
-  {
-    path: '/dashboard',
-    element: <div><Dashboard /></div>
-  },
-  {
-    path: '/login',
-    element: <div><Login /></div>
-  },
-])
+    return <>{routes}</>;
+};
 
-function App() {
-  return (
-   <div>
-    <RouterProvider router={router}/>
-   </div>
-  )
-}
-
-export default App
+export default App;

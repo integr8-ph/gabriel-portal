@@ -1,12 +1,19 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
-  return (
-    <div>
-        This is Dashboard Page
-        <a href="/">to log out</a>
-    </div>
-  )
-}
+    const handleLogout = () => {
+        localStorage.removeItem("accessToken");
+    };
 
-export default Dashboard
+    return (
+        <div>
+            This is Dashboard Page
+            <Link to="/" onClick={handleLogout}>
+                Logout
+            </Link>
+        </div>
+    );
+};
+
+export default Dashboard;
