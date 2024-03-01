@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../App.css";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 import cover from "../../assets/LoginAssets/cover1.png";
@@ -21,22 +22,21 @@ const Login = () => {
         formData.append("username", username);
         formData.append("password", password);
 
-        const response = await fetch(
-            "http://127.0.0.1:8000/login/access-token",
-            {
-                method: "POST",
-                body: formData,
-            }
-        );
+        try {
+            const response = await axios.post(
+                "http://127.0.0.1:8000/login/access-token",
+                formData
+            );
 
-        if (response.ok) {
-            const data = await response.json();
+            // Axios automatically parses the response JSON
+            const data = response.data;
             localStorage.setItem("accessToken", data["access_token"]);
 
             navigate("/");
-        } else {
+        } catch (error) {
             setLoginStatus("Invalid Username or Password");
         }
+
     };
 
     return (
