@@ -1,5 +1,4 @@
-Dashboard.css
-
+/* Dashboard.css  */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -18,8 +17,13 @@ html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
     flex-grow: 1;
+}
+
+.table-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
 }
 
 .table-container {
@@ -36,35 +40,47 @@ html {
     font-size: 2rem;
     font-weight: 700;
     color: #044883;
+    display: flex;
+    align-items: flex-start;
 }
 
 .add-column {
     display: flex;
-    justify-content: flex-end;
-    width: 100%;
+    align-items: flex-end;
+    margin-left: auto;
+}
+
+.add-button {
+    background-color: #044883;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.add-button:hover {
+    filter: brightness(90%);
 }
 
 .table {
     border-collapse: collapse;
     box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
-    text-align: left;
     overflow: hidden;
     width: 100%;
 }
 
 .table-header {
-    background-color: white;
+    background-color: var(--whiteColor);
     border-bottom: 3px solid #ececec;
     box-shadow: 0px 5px 10px -3px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
 .table-header th {
     padding: 1rem 2rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1rem;
     font-size: 0.875rem;
     font-weight: 700;
-    text-align: left;
 }
 
 .table-header td {
@@ -73,12 +89,12 @@ html {
 
 .table-row {
     background-color: #fff;
+    border-bottom: gray ;
 }
 
 .table-cell {
     padding: 0.75rem;
     font-size: 0.875rem;
-    color: #4a5568;
 }
 
 .action-buttons button {
@@ -91,16 +107,3 @@ html {
     filter: brightness(90%);
 }
 
-.add-button {
-    background-color: #044883;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-right: 0;
-}
-
-.add-button:hover {
-    filter: brightness(90%);
-}
