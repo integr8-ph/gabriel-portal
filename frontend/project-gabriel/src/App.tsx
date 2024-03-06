@@ -2,7 +2,7 @@ import React from "react";
 
 import { useRoutes } from "react-router-dom";
 
-import "./App.scss";
+import "././style/Login.scss";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Login from "./components/Login/Login";
 import PrivateRoute from "./components/Auth/auth";

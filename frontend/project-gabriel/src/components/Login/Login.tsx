@@ -28,7 +28,6 @@ const Login = () => {
                 formData
             );
 
-            // Axios automatically parses the response JSON
             const data = response.data;
             localStorage.setItem("accessToken", data["access_token"]);
 
@@ -97,7 +96,7 @@ const Login = () => {
                                 />
                             </div>
                         </div>
-
+                                    <br/>
                         <button type="submit" className="loginbtn flex">
                             <span>LOGIN</span>
                         </button>
