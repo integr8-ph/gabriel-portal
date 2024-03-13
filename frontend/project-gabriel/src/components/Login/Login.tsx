@@ -34,7 +34,7 @@ const Login = () => {
             const data = response.data;
             localStorage.setItem("accessToken", data["access_token"]);
 
-            navigate("/");
+            navigate("/table");
         } catch (error) {
             setLoginStatus("Invalid Username or Password");
         }
