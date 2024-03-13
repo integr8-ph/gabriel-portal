@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import "../../style/Login.scss";
+
+import "../../styles/Login.css";
+import "../../../index.css";
+
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -39,75 +42,69 @@ const Login = () => {
     };
 
     return (
-        <div className="loginPage flex">
-            <div className="container flex">
-                <div className="coverDiv">
-                    <img
-                        src={cover}
-                        className="cover"
-                        alt="Background Cover"
-                    ></img>
-                    <center>
-                        <div className="footerDiv flex">
-                            <span className="text">Need Assistance? </span>
-                            <Link to={"/contact"}>
-                                <button className="btn">Contact Us</button>
-                            </Link>
-                        </div>
-                    </center>
-                </div>
-
-                <div className="formDiv flex">
-                    <div className="headerDiv">
-                        <img src={logo} alt="Logo Image" />
+            <div className="loginPage flex">
+                <div className="container flex">
+                    <div className="coverDiv">
+                        <img src={cover} className="cover" alt="Background Cover"></img>
+                        
+                            <div className="footerDiv flex">
+                                <span className="text">Need Assistance? </span>
+                                <Link to={"/contact"}>
+                                    <button className="btn">Contact Us</button>
+                                </Link>
+                            </div>
+                        
                     </div>
-
-                    <form onSubmit={handleSubmit} className="form grid">
-                        <span>{loginStatus}</span>
-
-                        <div className="inputDiv">
-                            <label htmlFor="username">Username</label>
-                            <div className="input flex">
-                                <FaUserShield className="icon" />
-                                <input
-                                    type="text"
-                                    id="username"
-                                    name="username"
-                                    placeholder="Enter username"
-                                    onChange={(e) =>
-                                        setUsername(e.target.value)
-                                    }
-                                />
-                            </div>
-                        </div>
-
-                        <div className="inputDiv">
-                            <label htmlFor="password">Password</label>
-                            <div className="input flex">
-                                <RiLockPasswordFill className="icon" />
-                                <input
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    placeholder="Enter password"
-                                    onChange={(e) =>
-                                        setPassword(e.target.value)
-                                    }
-                                />
-                            </div>
-                        </div>
-                                    <br/>
-                        <button type="submit" className="loginbtn flex">
-                            <span>LOGIN</span>
-                        </button>
-
-                        <span className="forgotPassword">
-                            Forgot your password? <a href="">Click Here</a>
-                        </span>
-                    </form>
                 </div>
+                <div className="formDiv flex">
+                        <div className="headerDiv flex">
+                            <img src={logo} alt="Logo Image" />
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="form grid">
+                            <span>{loginStatus}</span>
+
+                            <div className="inputDiv">
+                                <label htmlFor="username">Username</label>
+                                <div className="input flex">
+                                    <FaUserShield className="icon" />
+                                    <input
+                                        type="text"
+                                        id="username"
+                                        name="username"
+                                        placeholder="Enter username"
+                                        onChange={(e) =>
+                                            setUsername(e.target.value)
+                                        }
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="inputDiv">
+                                <label htmlFor="password">Password</label>
+                                <div className="input flex">
+                                    <RiLockPasswordFill className="icon" />
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                        placeholder="Enter password"
+                                        onChange={(e) =>
+                                            setPassword(e.target.value)
+                                        }
+                                    />
+                                </div>
+                            </div>
+                            <button type="submit" className="loginbtn">
+                                LOGIN
+                            </button>
+
+                            <span className="forgotPassword">
+                                Forgot your password? <a href="">Click Here</a>
+                            </span>
+                        </form>
+                    </div>
             </div>
-        </div>
     );
 };
 
