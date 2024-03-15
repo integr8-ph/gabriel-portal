@@ -6,7 +6,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: "Inter", ui-sans-serif;
+    font-family: "Montserrat", sans-serif;
 }
 
 :root {
@@ -103,7 +103,6 @@ img {
     box-shadow: 0 7px 50px rgb(214, 223, 213);
     font-size: 80%;
     background: hsl(0, 0%, 91%);
-    font-family: "Montserrat", sans-serif;
 }
 
 .container {
