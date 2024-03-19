@@ -183,8 +183,8 @@ const Table = () => {
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
                                         <tr>
                                             <th scope="col" className="px-4 py-3 flex items-center">Email</th>
-                                            <th scope="col" className="px-4 py-3">Admin</th>
-                                            <th scope="col" className="px-4 py-3">Status</th>
+                                            <th scope="col" className="px-4 py-3 text-center">Admin</th>
+                                            <th scope="col" className="px-4 py-3 text-center">Status</th>
                                             <th scope="col" className="px-4 py-3">
                                                 <span className="sr-only">Actions</span>
                                             </th>
@@ -194,8 +194,8 @@ const Table = () => {
                                         {dummyData.map((item, index) => (
                                             <tr key={index} className="border-b dark:border-gray-700">
                                                 <th scope="row" className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.email}</th>
-                                                <td className="px-4 py-3">{item.is_superuser ? 'Yes' : 'No'}</td>
-                                                <td className="px-4 py-3 max-w-[12rem] truncate items-center">
+                                                <td className="px-4 py-3 text-center">{item.is_superuser ? 'Yes' : 'No'}</td>
+                                                <td className="px-4 py-3 max-w-[12rem] truncate text-center items-center">
                                                     {item.is_active ? (
                                                         <span className="inline-block w-3 h-3 rounded-full bg-green-500 mr-2"></span>
                                                     ) : (
