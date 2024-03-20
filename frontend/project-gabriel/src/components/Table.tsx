@@ -62,6 +62,8 @@ const Table = () => {
         setIsDeleteUserModal(!isDeleteUserModal);
     };
 
+
+
     return (
         <>
             <div>
@@ -99,9 +101,7 @@ const Table = () => {
                                         <svg className="h-3.5 w-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                             <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                                         </svg>
-
                                         Add user
-
                                     </button>
                                     <div className="flex items-center space-x-3 w-full md:w-auto">
 
@@ -233,18 +233,10 @@ const Table = () => {
                                                                 </div>
                                                                 {/*  Modal body  */}
                                                                 <form action="#">
-                                                                    <div className="grid gap-4 mb-4 sm:grid-cols-2">
+                                                                    <div className="grid gap-4 mb-4 sm:grid-cols-1">
                                                                         <div>
                                                                             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                                                                             <input type="text" name="email" id="email" value={selectedItemIndex !== null ? dummyData[selectedItemIndex].email : ''} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter email address" required />
-                                                                        </div>
-                                                                        <div>
-                                                                            <label htmlFor="superuser" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Super user</label>
-                                                                            <select id="superuser" value={selectedItemIndex !== null ? dummyData[selectedItemIndex].is_superuser.toString() : ''} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                                                <option selected>Is this user a super user?</option>
-                                                                                <option value="true">Yes</option>
-                                                                                <option value="false">No</option>
-                                                                            </select>
                                                                         </div>
                                                                         <div>
                                                                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
@@ -254,6 +246,15 @@ const Table = () => {
                                                                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
                                                                             <input type="password" name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter password" required />
                                                                         </div>
+                                                                        <div>
+                                                                            <label htmlFor="superuser" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Admin</label>
+                                                                            <select id="superuser" value={selectedItemIndex !== null ? dummyData[selectedItemIndex].is_superuser.toString() : ''} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                <option selected>Is this user a admin?</option>
+                                                                                <option value="true">Yes</option>
+                                                                                <option value="false">No</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        
                                                                     </div>
                                                                     <div className="flex items-center space-x-4">
                                                                         <button type="submit" className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Update User</button>
@@ -350,12 +351,11 @@ const Table = () => {
                             </div>
                             {/*  Modal body  */}
                             <form action="#">
-                                <div className="grid gap-4 mb-4 sm:grid-cols-2">
+                                <div className="grid gap-4 mb-4 sm:grid-cols-1">
                                     <div>
                                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                                         <input type="text" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter email address" required />
                                     </div>
-                                    <div><label htmlFor="superuser" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Super user</label><select id="superuser" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"><option selected>Is this user a super user?</option><option value="true">Yes</option><option value="false">No</option></select></div>
                                     <div>
                                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                                         <input type="password" name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter password" required />
@@ -364,6 +364,8 @@ const Table = () => {
                                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
                                         <input type="password" name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter password" required />
                                     </div>
+                                    <div><label htmlFor="superuser" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Admin</label><select id="superuser" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"><option selected>Is this an admin?</option><option value="true">Yes</option><option value="false">No</option></select></div>
+                                    
                                 </div>
                                 <button type="submit" className="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 color:dark">
                                     <svg className="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -375,8 +377,6 @@ const Table = () => {
                         </div>
                     </div>
                 </div>
-
-
 
                 {/*  Read modal  */}
                 <div id="readProductModal" tabIndex={-1} aria-hidden={!isViewUserModal}
