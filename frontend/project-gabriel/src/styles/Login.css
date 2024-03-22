@@ -260,3 +260,7 @@ img {
     background: var(--hoverColor);
     font-weight: bold;
 }
+
+.toast {
+    font-family: 'Helvetica', sans-serif;
+}
