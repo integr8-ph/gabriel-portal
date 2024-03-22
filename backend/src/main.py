@@ -7,6 +7,12 @@ from src.config import get_settings
 
 app = FastAPI(lifespan=db_init, title=get_settings().PROJECT_NAME)
 
-app.add_middleware(CORSMiddleware, allow_origins="*", allow_methods="*")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(router)
